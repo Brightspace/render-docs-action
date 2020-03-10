@@ -1,0 +1,83 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\D2L\\render-docs-action\\src\\Render\\D2L.Dev.Docs.Render.csproj": {}
+  },
+  "projects": {
+    "C:\\D2L\\render-docs-action\\src\\Render\\D2L.Dev.Docs.Render.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\D2L\\render-docs-action\\src\\Render\\D2L.Dev.Docs.Render.csproj",
+        "projectName": "D2L.Dev.Docs.Render",
+        "projectPath": "C:\\D2L\\render-docs-action\\src\\Render\\D2L.Dev.Docs.Render.csproj",
+        "packagesPath": "C:\\Users\\jheard\\.nuget\\packages\\",
+        "outputPath": "C:\\D2L\\render-docs-action\\src\\Render\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jheard\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Markdig": {
+              "target": "Package",
+              "version": "[0.18.0, )"
+            },
+            "Scriban": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
+            "System.CommandLine.DragonFruit": {
+              "target": "Package",
+              "version": "[0.3.0-alpha.19577.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.0.2, 3.0.2]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
