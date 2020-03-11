@@ -2,51 +2,54 @@
 using System.IO;
 using System.Threading.Tasks;
 using D2L.Dev.Docs.Render.Markdown;
-using Markdig.Parsers;
 
 namespace D2L.Dev.Docs.Render {
 	internal static class Program {
-		/// <param name="input">The path to a markdown (.md) file to render</param>
-		/// <param name="pullRequestCommentsPath">The path (on https://github.com) to send diagnostics as comments</param>
-		public static async Task<int> Main(
-			string input,
-			string pullRequestCommentsPath
-		) {
-			if ( input == null ) {
-				Console.Error.WriteLine( "Missing --input argument" );
+		/// <param name="input">The path to a directory of markdown files to render</param>
+		/// <param name="output">The directory to put the rendered html files</param>
+		public static async Task<int> Main( string input, string output ) {
+			if ( input == null || output == null ) {
+				Console.Error.WriteLine( "--input and --output arguments are required" );
 				return -1;
 			}
 
-			var (name, ext) = GetNameAndExtension( input );
+			if( !Directory.Exists( input ) ) {
+				Console.Error.WriteLine( "input must be a  directory containing markdown (.md) files" );
+				return -1;
+			}
+
+			if( !Directory.Exists( output ) ) {
+				Directory.CreateDirectory( output );
+			}
+
+			foreach ( var filename in Directory.GetFiles( input ) ) {
+				await DoFile( filename, output );
+			}
+
+			return 0;
+		}
+
+		private static async Task DoFile( string filename, string outputDirectory ) {
+			var (name, ext) = GetNameAndExtension( filename );
 
 			if ( ext != "md" ) {
-				Console.Error.WriteLine( "Input should be a file ending in .md" );
-				return -1;
+				Console.Error.WriteLine( "{0} : Ignoring file not ending in .md", filename );
+				return;
 			}
 
 			if ( name == "README" ) {
 				name = "index";
 			}
 
-			var outputDir = Path.GetDirectoryName( input );
+			using var outputHtml = GetOutput( outputDirectory, name, ".html" );
 
-			if ( outputDir == null ) {
-				Console.Error.WriteLine( "Couldn't get output dir");
-				return -1;
-			}
-
-			using var outputHtml = GetOutput( outputDir, name, ".html");
-
-			var text = await File.ReadAllTextAsync( input );
-
+			var text = await File.ReadAllTextAsync( filename );
 
 			var doc = MarkdownFactory.Parse( text );
 
 			doc.ApplyD2LTweaks();
 
 			MarkdownFactory.Render( outputHtml, doc );
-			
-			return 0;
 		}
 
 		private static (string, string) GetNameAndExtension( string input ) {

@@ -13,4 +13,10 @@
     <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.19577.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Templates\page.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
