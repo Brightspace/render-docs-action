@@ -1,0 +1,11 @@
+name: Render Markdown Docs Action
+description: Renders markdown into D2L-formatted html; result stored in /output
+inputs:
+  docs_path:
+    description: "Relative path to the folder of markdown files to render"
+    required: true
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.docs_path }}
