@@ -50,7 +50,7 @@ namespace D2L.Dev.Docs.Render {
 			doc.ApplyD2LTweaks();
 			var html = MarkdownFactory.RenderToString( doc );
 
-			var renderer = TemplateRenderer.Create( "Templates/page.html" );
+			var renderer = TemplateRenderer.CreateFromResource( "Templates.page.html" );
 			var formatted = await renderer.RenderAsync(
 				title: "TODO: Get Title",
 				content: html
