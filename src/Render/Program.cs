@@ -52,7 +52,11 @@ namespace D2L.Dev.Docs.Render {
 			var renderer = new TemplateRenderer( 
 				await File.ReadAllTextAsync( "Templates/page.html" )
 			);
-			var formatted = await renderer.RenderAsync( "TODO: Get Title", html );
+			var formatted = await renderer.RenderAsync(
+				title: "TODO: Get Title",
+				content: html
+			);
+
 			outputHtml.Write( formatted );
 		}
 
