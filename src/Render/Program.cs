@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using D2L.Dev.Docs.Render.Markdown;
@@ -46,10 +47,16 @@ namespace D2L.Dev.Docs.Render {
 			var text = await File.ReadAllTextAsync( filename );
 
 			var doc = MarkdownFactory.Parse( text );
-
 			doc.ApplyD2LTweaks();
-
-			MarkdownFactory.Render( outputHtml, doc );
+			var html = MarkdownFactory.RenderToString( doc );
+			var formatted = await TemplateRenderer.RenderAsync(
+				"Templates/page.html",
+				new Dictionary<string, string>() {
+					["title"] = "TODO: Get title",
+					["content"] = html
+				}
+			);
+			outputHtml.Write( formatted );
 		}
 
 		private static (string, string) GetNameAndExtension( string input ) {
