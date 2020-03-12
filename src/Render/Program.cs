@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using D2L.Dev.Docs.Render.Markdown;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 
 namespace D2L.Dev.Docs.Render {
 	internal static class Program {
@@ -52,17 +54,25 @@ namespace D2L.Dev.Docs.Render {
 
 			var renderer = TemplateRenderer.CreateFromResource( "Templates.page.html" );
 			var formatted = await renderer.RenderAsync(
-				title: "TODO: Get Title",
+				title: GetTitle( doc ),
 				content: html
 			);
 
 			outputHtml.Write( formatted );
 		}
 
+		private static string GetTitle( MarkdownDocument doc ) {
+			var inline = doc.Descendants<HeadingBlock>().Single(
+				h => h.Level == 1
+			).Inline;
+			var titleLiteral = inline.Descendants<LiteralInline>().Single();
+			return titleLiteral.Content.ToString();
+		}
+
 		private static (string, string) GetNameAndExtension( string input ) {
 			var idx = input.LastIndexOf( '.' );
 			return (input.Substring( 0, idx ), input.Substring( idx + 1 ) );
-		} 
+		}
 
 		private static TextWriter GetOutput( string outputDir, string name, string ext ) {
 			return new StreamWriter(
