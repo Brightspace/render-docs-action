@@ -62,11 +62,14 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static string GetTitle( MarkdownDocument doc ) {
-			var inline = doc.Descendants<HeadingBlock>().FirstOrDefault(
+			var inline = doc.Descendants<HeadingBlock>().Single(
 				h => h.Level == 1
-			)?.Inline;
-			var titleLiteral = inline.Descendants<LiteralInline>().First();
-			return titleLiteral.Content.ToString();
+			).Inline;
+			var title = string.Join(
+				' ',
+				inline.Descendants<LiteralInline>().Select( li => li.Content.ToString() )
+			);
+			return title;
 		}
 
 		private static (string, string) GetNameAndExtension( string input ) {
