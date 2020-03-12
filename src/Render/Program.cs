@@ -49,9 +49,7 @@ namespace D2L.Dev.Docs.Render {
 			var doc = MarkdownFactory.Parse( text );
 			doc.ApplyD2LTweaks();
 			var html = MarkdownFactory.RenderToString( doc );
-			var renderer = new TemplateRenderer( 
-				await File.ReadAllTextAsync( "Templates/page.html" )
-			);
+			var renderer = TemplateRenderer.Create( "Templates/page.html" );
 			var formatted = await renderer.RenderAsync( "TODO: Get Title", html );
 			outputHtml.Write( formatted );
 		}
