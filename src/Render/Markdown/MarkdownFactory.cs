@@ -23,6 +23,13 @@ namespace D2L.Dev.Docs.Render.Markdown {
 			renderer.Render( doc );
 		}
 
+		public static string RenderToString( MarkdownDocument doc ) {
+			using var writer = new StringWriter();
+			var renderer = CreateRenderer( writer );
+			renderer.Render( doc );
+			return writer.ToString();
+		}
+
 		public static MarkdownPipeline CreatePipeline() =>
 			new MarkdownPipelineBuilder()
 				// We could explore disabling this and re-parsing only if we have errors.
