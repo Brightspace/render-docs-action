@@ -54,7 +54,7 @@ namespace D2L.Dev.Docs.Render {
 
 			var renderer = TemplateRenderer.CreateFromResource( "Templates.page.html" );
 			var formatted = await renderer.RenderAsync(
-				title:GetTitle( doc ),
+				title: GetTitle( doc ),
 				content: html
 			);
 
