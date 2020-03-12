@@ -1,19 +1,19 @@
 ﻿using Scriban;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace D2L.Dev.Docs.Render.Markdown {
-	internal static class TemplateRenderer {
-	
-		public static async Task<string> RenderAsync( 
-			string templateFileName, 
-			IDictionary<string, string> args 
-		) {
-			var html = await File.ReadAllTextAsync( templateFileName );
-			var template = Template.Parse( html );
+	internal class TemplateRenderer {
+		private readonly Template m_template;
+		
+		public TemplateRenderer( string template ) {
+			m_template = Template.Parse( template );
+		}
 
-			return await template.RenderAsync( args );
+		public async Task<string> RenderAsync( string title, string content ) {
+			return await m_template.RenderAsync( new {
+				title,
+				content
+			} );
 		}
 
 	}
