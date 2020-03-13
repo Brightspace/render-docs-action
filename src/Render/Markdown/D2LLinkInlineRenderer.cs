@@ -1,6 +1,8 @@
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax.Inlines;
+using System;
+using System.Text;
 
 namespace D2L.Dev.Docs.Render.Markdown {
 	/// <summary>An HtmlObjectRenderer for D2L links</summary>
@@ -8,6 +10,13 @@ namespace D2L.Dev.Docs.Render.Markdown {
 	/// default one. The only signficant difference is that we use d2l-link
 	/// instead of a.</remarks>
 	internal sealed class D2LLinkInlineRenderer : HtmlObjectRenderer<LinkInline> {
+
+		private readonly DocumentContext m_docContext;
+
+		public D2LLinkInlineRenderer( DocumentContext context ) {
+			m_docContext = context;
+		}
+
 		protected override void Write(
 			HtmlRenderer renderer,
 			LinkInline link
@@ -19,11 +28,8 @@ namespace D2L.Dev.Docs.Render.Markdown {
 					renderer.Write( "<d2l-link href=\"" );
 				}
 
-				if ( link.GetDynamicUrl != null ) {
-					renderer.WriteEscapeUrl( link.GetDynamicUrl() ?? link.Url );
-				} else {
-					renderer.WriteEscapeUrl( link.Url );
-				}
+				string url = link.GetDynamicUrl?.Invoke() ?? link.Url;
+				renderer.WriteEscapeUrl( RewriteLink( url, m_docContext ) );
 
 				renderer.Write( "\"" );
 				renderer.WriteAttributes( link );
@@ -65,5 +71,20 @@ namespace D2L.Dev.Docs.Render.Markdown {
 				}
 			}
 		}
+
+		private string RewriteLink( string url, DocumentContext context ) {
+			string rewritten = url;
+
+			if( url.StartsWith( "/" ) ) {
+				rewritten = $"/{context.DocRootRepoName}{rewritten}";
+			}
+
+			if ( rewritten.EndsWith( ".md" ) ) {
+				rewritten = rewritten.Substring( 0, rewritten.Length - 3 );
+			}
+
+			return rewritten;
+		}
+
 	}
 }

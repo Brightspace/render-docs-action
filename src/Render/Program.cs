@@ -48,9 +48,10 @@ namespace D2L.Dev.Docs.Render {
 
 			var text = await File.ReadAllTextAsync( filename );
 
+			var context = new DocumentContext( "test" );
 			var doc = MarkdownFactory.Parse( text );
 			doc.ApplyD2LTweaks();
-			var html = MarkdownFactory.RenderToString( doc );
+			var html = MarkdownFactory.RenderToString( doc, context );
 
 			var renderer = TemplateRenderer.CreateFromResource( "Templates.page.html" );
 			var formatted = await renderer.RenderAsync(
