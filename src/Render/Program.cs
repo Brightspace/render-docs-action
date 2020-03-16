@@ -48,7 +48,10 @@ namespace D2L.Dev.Docs.Render {
 
 			var text = await File.ReadAllTextAsync( filename );
 
-			var context = new DocumentContext( "test" );
+			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" ).Split('/')[1];
+
+			var context = new DocumentContext( repoName );
 			var doc = MarkdownFactory.Parse( text );
 			doc.ApplyD2LTweaks();
 			var html = MarkdownFactory.RenderToString( doc, context );
