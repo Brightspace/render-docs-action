@@ -65,7 +65,12 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static void CopyAssociatedFiles( MarkdownDocument doc, string outputDirectory ) {
-			foreach( var (_, link) in doc.GetLinkReferenceDefinitions().Links ) {
+			foreach(var child in doc.Descendants() ) {
+				if ( !(child is LinkInline) ) {
+					continue;
+				}
+
+				var link = child as LinkInline;
 				if ( link.Url.EndsWith( ".md" ) ) {
 					continue;
 				}
@@ -85,11 +90,17 @@ namespace D2L.Dev.Docs.Render {
 
 		private static void CopyFileKeepingRelativePath( string filepath, string outputDirectoryRoot ) {
 			string outputPath = Path.Combine( outputDirectoryRoot, filepath );
+			string parent = Directory.GetParent( outputPath ).FullName;
+			
+			if( !File.Exists( filepath ) ) {
+				Console.WriteLine( $"Could not find file '{filepath}', skipping" );
+				return;
+			}
 			if ( File.Exists( outputPath ) ) {
 				return;
 			}
-			if ( !Directory.Exists( outputPath ) ) {
-				Directory.CreateDirectory( outputPath );
+			if ( !Directory.Exists( parent ) ) {
+				Directory.CreateDirectory( parent );
 			}
 			File.Copy( filepath, outputPath );
 		}
