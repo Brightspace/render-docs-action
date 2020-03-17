@@ -18,14 +18,14 @@ namespace D2L.Dev.Docs.Render.Markdown {
 			);
 		}
 
-		public static void Render( TextWriter outputHtml, MarkdownDocument doc ) {
-			var renderer = CreateRenderer( outputHtml );
+		public static void Render( TextWriter outputHtml, MarkdownDocument doc, DocumentContext context ) {
+			var renderer = CreateRenderer( outputHtml, context );
 			renderer.Render( doc );
 		}
 
-		public static string RenderToString( MarkdownDocument doc ) {
+		public static string RenderToString( MarkdownDocument doc, DocumentContext context ) {
 			using var writer = new StringWriter();
-			var renderer = CreateRenderer( writer );
+			var renderer = CreateRenderer( writer, context );
 			renderer.Render( doc );
 			return writer.ToString();
 		}
@@ -45,11 +45,11 @@ namespace D2L.Dev.Docs.Render.Markdown {
 				
 				.Build();
 
-		public static IMarkdownRenderer CreateRenderer( TextWriter writer ) {
+		public static IMarkdownRenderer CreateRenderer( TextWriter writer, DocumentContext context ) {
 			var renderer = new HtmlRenderer( writer );
 	
 			renderer.ObjectRenderers.Replace<LinkInlineRenderer>(
-				new D2LLinkInlineRenderer()
+				new D2LLinkInlineRenderer( context )
 			); 
 
 			renderer.ObjectRenderers
