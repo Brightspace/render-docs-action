@@ -89,10 +89,6 @@ namespace D2L.Dev.Docs.Render {
 			string outputPath = Path.Combine( outputDirectoryRoot, filepath );
 			string parent = Directory.GetParent( outputPath ).FullName;
 			
-			if( !File.Exists( filepath ) ) {
-				Console.WriteLine( $"Could not find file '{filepath}', skipping" );
-				return;
-			}
 			if ( File.Exists( outputPath ) ) {
 				return;
 			}
