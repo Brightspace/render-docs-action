@@ -65,12 +65,9 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static void CopyAssociatedFiles( MarkdownDocument doc, string outputDirectory ) {
-			foreach(var child in doc.Descendants() ) {
-				if ( !(child is LinkInline) ) {
-					continue;
-				}
-
-				var link = child as LinkInline;
+			var links = doc.Descendants().OfType<LinkInline>();
+                        
+			foreach( var link in links ) {
 				if ( link.Url.EndsWith( ".md" ) ) {
 					continue;
 				}
