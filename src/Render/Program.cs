@@ -59,6 +59,42 @@ namespace D2L.Dev.Docs.Render {
 			);
 
 			outputHtml.Write( formatted );
+
+			CopyAssociatedFiles( doc, outputDirectory );
+		}
+
+		private static void CopyAssociatedFiles( MarkdownDocument doc, string outputDirectory ) {
+			var links = doc.Descendants().OfType<LinkInline>();
+                        
+			foreach( var link in links ) {
+				if ( link.Url.EndsWith( ".md" ) ) {
+					continue;
+				}
+				// Skip any URL which has a scheme
+				if ( Uri.IsWellFormedUriString( link.Url, UriKind.Absolute ) ) {
+					continue;
+				}
+
+				// TODO: Handle "absolute" urls, e.g. start with "/"
+				
+				CopyFileKeepingRelativePath(
+					filepath: link.Url,
+					outputDirectoryRoot: outputDirectory
+				);
+			}
+		}
+
+		private static void CopyFileKeepingRelativePath( string filepath, string outputDirectoryRoot ) {
+			string outputPath = Path.Combine( outputDirectoryRoot, filepath );
+			string parent = Directory.GetParent( outputPath ).FullName;
+			
+			if ( File.Exists( outputPath ) ) {
+				return;
+			}
+			if ( !Directory.Exists( parent ) ) {
+				Directory.CreateDirectory( parent );
+			}
+			File.Copy( filepath, outputPath );
 		}
 
 		private static string GetTitle( MarkdownDocument doc ) {
