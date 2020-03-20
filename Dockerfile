@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
-COPY ./ /
+COPY ./ /render
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/render/entrypoint.sh"]

@@ -5,4 +5,4 @@ if [ $# -ne 1 ]; then
 	exit 1
 fi
 
-dotnet run -p ./src/Render --input $1 --output /output
+dotnet run -p /render/src/Render/D2L.Dev.Docs.Render.csproj --input $1 --output output
