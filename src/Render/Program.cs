@@ -115,9 +115,13 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static TextWriter GetOutput( string outputDir, string name, string ext ) {
-			return new StreamWriter(
-				Path.Combine( outputDir, name + ext )
-			);
+			var path = Path.Combine( outputDir, name + ext );
+			var parent = Directory.GetParent( path );
+			if( !parent.Exists ) {
+				parent.Create();
+			}
+
+			return new StreamWriter( path );
 		}
 	}
 }
