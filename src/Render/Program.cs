@@ -108,10 +108,11 @@ namespace D2L.Dev.Docs.Render {
 			return titleLiteral.Content.ToString();
 		}
 
+		// TODO: Make a struct? 3 return values is a bit much
 		private static (string path, string name, string ext) GetFileInfo( string input ) {
 			var path = Directory.GetParent( input ).FullName;
 			var name = Path.GetFileName( input );
-			var ext = Path.GetExtension( input );
+			var ext = Path.GetExtension( input ).TrimStart('.');
 			return (path, name, ext);
 		}
 
