@@ -91,7 +91,13 @@ namespace D2L.Dev.Docs.Render {
 		private static void CopyFileKeepingRelativePath( string filepath, string outputDirectoryRoot ) {
 			string outputPath = Path.Combine( outputDirectoryRoot, filepath );
 			string parent = Directory.GetParent( outputPath ).FullName;
-			
+
+			if ( !File.Exists( filepath ) ) {
+				Console.WriteLine("WARNING: file '{0}' not found", filepath);
+				return;
+			}
+
+			// TODO: Handle copying directories
 			if ( File.Exists( outputPath ) ) {
 				return;
 			}
