@@ -25,7 +25,8 @@ namespace D2L.Dev.Docs.Render {
 				Directory.CreateDirectory( output );
 			}
 
-			foreach ( var filename in Directory.GetFiles( input ) ) {
+			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
+			foreach ( var filename in directories ) {
 				await DoFile( filename, output );
 			}
 
@@ -33,18 +34,18 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static async Task DoFile( string filename, string outputDirectory ) {
-			var (name, ext) = GetNameAndExtension( filename );
+			var fileInfo = GetFileInfo( filename );
 
-			if ( ext != "md" ) {
+			if ( fileInfo.ext != "md" ) {
 				Console.Error.WriteLine( "{0} : Ignoring file not ending in .md", filename );
 				return;
 			}
-
-			if ( name == "README" ) {
-				name = "index";
+			if ( fileInfo.name.ToUpperInvariant() == "README" ) {
+				fileInfo.name = "index";
 			}
 
-			using var outputHtml = GetOutput( outputDirectory, name, ".html" );
+			var relpath = Path.GetRelativePath( fileInfo.path, outputDirectory );
+			using var outputHtml = GetOutput( relpath, fileInfo.name, ".html" );
 
 			var text = await File.ReadAllTextAsync( filename );
 
@@ -115,9 +116,12 @@ namespace D2L.Dev.Docs.Render {
 			return titleLiteral.Content.ToString();
 		}
 
-		private static (string, string) GetNameAndExtension( string input ) {
-			var idx = input.LastIndexOf( '.' );
-			return (input.Substring( 0, idx ), input.Substring( idx + 1 ) );
+		// TODO: Make a struct? 3 return values is a bit much
+		private static (string path, string name, string ext) GetFileInfo( string input ) {
+			var path = Directory.GetParent( input ).FullName;
+			var name = Path.GetFileName( input );
+			var ext = Path.GetExtension( input ).TrimStart('.');
+			return (path, name, ext);
 		}
 
 		private static TextWriter GetOutput( string outputDir, string name, string ext ) {
