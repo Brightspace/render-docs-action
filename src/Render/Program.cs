@@ -25,8 +25,10 @@ namespace D2L.Dev.Docs.Render {
 				Directory.CreateDirectory( output );
 			}
 
-			foreach ( var filename in Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories ) ) {
-				await DoFile( filename, output );
+			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
+			foreach ( var filename in directories ) {
+				var relpath = Path.GetRelativePath( filename, input );
+				await DoFile( relpath, output );
 			}
 
 			return 0;
