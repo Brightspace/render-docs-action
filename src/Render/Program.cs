@@ -109,10 +109,10 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static string GetTitle( MarkdownDocument doc ) {
-			var inline = doc.Descendants<HeadingBlock>().First(
+			var inline = doc.Descendants<HeadingBlock>().Single(
 				h => h.Level == 1
 			).Inline;
-			var titleLiteral = inline.Descendants<LiteralInline>().First();
+			var titleLiteral = inline.Descendants<LiteralInline>().Single();
 			return titleLiteral.Content.ToString();
 		}
 
