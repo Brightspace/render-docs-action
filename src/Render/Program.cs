@@ -27,8 +27,7 @@ namespace D2L.Dev.Docs.Render {
 
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
-				var relpath = Path.GetRelativePath( filename, input );
-				await DoFile( relpath, output );
+				await DoFile( filename, output );
 			}
 
 			return 0;
@@ -45,7 +44,8 @@ namespace D2L.Dev.Docs.Render {
 				fileInfo.name = "index";
 			}
 
-			using var outputHtml = GetOutput( Path.Join(outputDirectory, fileInfo.path), fileInfo.name, ".html" );
+			var relpath = Path.GetRelativePath( fileInfo.path, outputDirectory );
+			using var outputHtml = GetOutput( relpath, fileInfo.name, ".html" );
 
 			var text = await File.ReadAllTextAsync( filename );
 
