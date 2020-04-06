@@ -4,8 +4,13 @@ inputs:
   docs_path:
     description: "Relative path to the folder of markdown files to render"
     required: true
+  output_dir:
+    description: "Path to the output directory to use"
+    required: false
+    default: output
 runs:
   using: docker
   image: Dockerfile
   args:
     - ${{ inputs.docs_path }}
+    - ${{ inputs.output_dir }}
