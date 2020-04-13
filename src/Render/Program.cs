@@ -27,17 +27,13 @@ namespace D2L.Dev.Docs.Render {
 
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
-				await DoFile( 
-					filename: filename,
-					inputDirectory: input,
-					outputDirectory: output
-				);
+				await DoFile( filename, output );
 			}
 
 			return 0;
 		}
 
-		private static async Task DoFile( string filename, string inputDirectory, string outputDirectory ) {
+		private static async Task DoFile( string filename, string outputDirectory ) {
 			var fileInfo = GetFileInfo( filename );
 
 			if ( fileInfo.ext != "md" ) {
@@ -48,8 +44,8 @@ namespace D2L.Dev.Docs.Render {
 				fileInfo.name = "index";
 			}
 
-			var path = Path.Join( outputDirectory, Path.GetRelativePath( inputDirectory, fileInfo.path ) );
-			using var outputHtml = GetOutput( path, fileInfo.name, ".html" );
+			var relpath = Path.GetRelativePath( fileInfo.path, outputDirectory );
+			using var outputHtml = GetOutput( relpath, fileInfo.name, ".html" );
 
 			var text = await File.ReadAllTextAsync( filename );
 
@@ -93,7 +89,7 @@ namespace D2L.Dev.Docs.Render {
 			}
 		}
 
-		private static void CopyFileKeepingRelativePath( string filepath, string inputDirectoryRoot, string outputDirectoryRoot ) {
+		private static void CopyFileKeepingRelativePath( string filepath, string outputDirectoryRoot ) {
 			string outputPath = Path.Combine( outputDirectoryRoot, filepath );
 			string parent = Directory.GetParent( outputPath ).FullName;
 
@@ -123,7 +119,7 @@ namespace D2L.Dev.Docs.Render {
 		// TODO: Make a struct? 3 return values is a bit much
 		private static (string path, string name, string ext) GetFileInfo( string input ) {
 			var path = Directory.GetParent( input ).FullName;
-			var name = Path.GetFileNameWithoutExtension( input );
+			var name = Path.GetFileName( input );
 			var ext = Path.GetExtension( input ).TrimStart('.');
 			return (path, name, ext);
 		}
