@@ -67,17 +67,22 @@ namespace D2L.Dev.Docs.Render {
 			var links = doc.Descendants().OfType<LinkInline>();
                         
 			foreach( var link in links ) {
-				if ( link.Url.EndsWith( ".md" ) ) {
+				string url = link.GetDynamicUrl?.Invoke() ?? link.Url;
+
+				if ( url.EndsWith( ".md" ) ) {
 					continue;
 				}
 				// Skip any URL which has a scheme
-				if ( Uri.IsWellFormedUriString( link.Url, UriKind.Absolute ) ) {
+				if ( Uri.IsWellFormedUriString( url, UriKind.Absolute ) ) {
+					continue;
+				}
+				if ( !File.Exists( url ) ) {
+					Console.WriteLine( $"Could not find file '{url}', skipping" );
 					continue;
 				}
 
 				// TODO: Handle "absolute" urls, e.g. start with "/"
 
-				string url = link.GetDynamicUrl?.Invoke() ?? link.Url;
 				new RelativeFile( input, output, url ).Copy();
 			}
 		}
