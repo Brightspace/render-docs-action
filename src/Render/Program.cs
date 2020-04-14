@@ -69,7 +69,7 @@ namespace D2L.Dev.Docs.Render {
 			foreach( var link in links ) {
 				string url = link.GetDynamicUrl?.Invoke() ?? link.Url;
 
-				if ( url.EndsWith( ".md" ) ) {
+				if ( url.EndsWith( ".md" ) || url.StartsWith("#") ) {
 					continue;
 				}
 				// Skip any URL which has a scheme
