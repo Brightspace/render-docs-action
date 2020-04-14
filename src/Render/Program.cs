@@ -27,27 +27,23 @@ namespace D2L.Dev.Docs.Render {
 
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
-				await DoFile( filename, output );
+				await DoFile( new RelativeFile( input, output, filename ) );
 			}
 
 			return 0;
 		}
 
-		private static async Task DoFile( string filename, string outputDirectory ) {
-			var fileInfo = GetFileInfo( filename );
-
-			if ( fileInfo.ext != "md" ) {
-				Console.Error.WriteLine( "{0} : Ignoring file not ending in .md", filename );
+		private static async Task DoFile( RelativeFile file ) {
+			if ( file.Extension != "md" ) {
+				Console.Error.WriteLine( "{0} : Ignoring file not ending in .md", file.Name );
 				return;
 			}
-			if ( fileInfo.name.ToUpperInvariant() == "README" ) {
-				fileInfo.name = "index";
+			string name = file.Name;
+			if ( name.ToUpperInvariant() == "README" ) {
+				name = "index";
 			}
 
-			var relpath = Path.GetRelativePath( fileInfo.path, outputDirectory );
-			using var outputHtml = GetOutput( relpath, fileInfo.name, ".html" );
-
-			var text = await File.ReadAllTextAsync( filename );
+			var text = await file.Read();
 
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
 			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" ).Split('/')[1];
@@ -63,49 +59,32 @@ namespace D2L.Dev.Docs.Render {
 				content: html
 			);
 
-			outputHtml.Write( formatted );
-
-			CopyAssociatedFiles( doc, outputDirectory );
+			await file.Write( formatted, name + ".html" );
+			CopyAssociatedFiles( doc, file.SourceRoot, file.DestinationRoot );
 		}
 
-		private static void CopyAssociatedFiles( MarkdownDocument doc, string outputDirectory ) {
+		private static void CopyAssociatedFiles( MarkdownDocument doc, string input, string output ) {
 			var links = doc.Descendants().OfType<LinkInline>();
                         
 			foreach( var link in links ) {
-				if ( link.Url.EndsWith( ".md" ) ) {
+				string url = link.GetDynamicUrl?.Invoke() ?? link.Url;
+
+				if ( url.EndsWith( ".md" ) ) {
 					continue;
 				}
 				// Skip any URL which has a scheme
-				if ( Uri.IsWellFormedUriString( link.Url, UriKind.Absolute ) ) {
+				if ( Uri.IsWellFormedUriString( url, UriKind.Absolute ) ) {
+					continue;
+				}
+				if ( !File.Exists( url ) ) {
+					Console.WriteLine( $"Could not find file '{url}', skipping" );
 					continue;
 				}
 
 				// TODO: Handle "absolute" urls, e.g. start with "/"
-				
-				CopyFileKeepingRelativePath(
-					filepath: link.Url,
-					outputDirectoryRoot: outputDirectory
-				);
-			}
-		}
 
-		private static void CopyFileKeepingRelativePath( string filepath, string outputDirectoryRoot ) {
-			string outputPath = Path.Combine( outputDirectoryRoot, filepath );
-			string parent = Directory.GetParent( outputPath ).FullName;
-
-			if ( !File.Exists( filepath ) ) {
-				Console.WriteLine("WARNING: file '{0}' not found", filepath);
-				return;
+				new RelativeFile( input, output, url ).Copy();
 			}
-
-			// TODO: Handle copying directories
-			if ( File.Exists( outputPath ) ) {
-				return;
-			}
-			if ( !Directory.Exists( parent ) ) {
-				Directory.CreateDirectory( parent );
-			}
-			File.Copy( filepath, outputPath );
 		}
 
 		private static string GetTitle( MarkdownDocument doc ) {
@@ -116,22 +95,5 @@ namespace D2L.Dev.Docs.Render {
 			return titleLiteral.Content.ToString();
 		}
 
-		// TODO: Make a struct? 3 return values is a bit much
-		private static (string path, string name, string ext) GetFileInfo( string input ) {
-			var path = Directory.GetParent( input ).FullName;
-			var name = Path.GetFileName( input );
-			var ext = Path.GetExtension( input ).TrimStart('.');
-			return (path, name, ext);
-		}
-
-		private static TextWriter GetOutput( string outputDir, string name, string ext ) {
-			var path = Path.Combine( outputDir, name + ext );
-			var parent = Directory.GetParent( path );
-			if( !parent.Exists ) {
-				parent.Create();
-			}
-
-			return new StreamWriter( path );
-		}
 	}
 }
