@@ -76,6 +76,8 @@ namespace D2L.Dev.Docs.Render {
 				if ( Uri.IsWellFormedUriString( url, UriKind.Absolute ) ) {
 					continue;
 				}
+
+				url = Path.Join( input, url );
 				if ( !File.Exists( url ) ) {
 					Console.WriteLine( $"Could not find file '{url}', skipping" );
 					continue;

@@ -43,15 +43,10 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private string GetDestinationPath( string newName = null ) {
-			string path;
-			string relpath = System.IO.Path.GetRelativePath( SourceRoot, Path );
-			if ( newName != null ) {
-				string relpathWithoutFilename = Directory.GetParent( relpath ).FullName;
-				path = System.IO.Path.Join( DestinationRoot, relpathWithoutFilename, newName );
-			} else {
-				path = System.IO.Path.Join( DestinationRoot, relpath );
-			}
-			return path;
+			newName = newName ?? System.IO.Path.GetFileName( Path );
+			string parent = Directory.GetParent( Path ).FullName;
+			string relparent = System.IO.Path.GetRelativePath( SourceRoot, parent );
+			return System.IO.Path.Join( DestinationRoot, relparent, newName );
 		}
 
 		private void GuaranteeParent( string path ) {
