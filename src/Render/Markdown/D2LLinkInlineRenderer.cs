@@ -80,7 +80,7 @@ namespace D2L.Dev.Docs.Render.Markdown {
 			}
 
 			if ( rewritten.EndsWith( ".md" ) ) {
-				rewritten = rewritten.Substring( 0, rewritten.Length - 3 );
+				rewritten = rewritten.Substring( 0, rewritten.Length - 3 ) + ".html";
 			}
 
 			return rewritten;
