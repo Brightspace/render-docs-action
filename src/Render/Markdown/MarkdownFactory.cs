@@ -40,7 +40,7 @@ namespace D2L.Dev.Docs.Render.Markdown {
 				.UseFigures()
 				.UseFootnotes()
 				.UsePipeTables()
-				.UseAutoIdentifiers()
+				.UseAutoIdentifiers( AutoIdentifierOptions.Default | AutoIdentifierOptions.GitHub )
 				.UseYamlFrontMatter()
 				
 				.Build();
