@@ -35,9 +35,10 @@ namespace D2L.Dev.Docs.Render {
 
 		private static async Task DoFile( RelativeFile file ) {
 			if ( file.Extension != "md" ) {
-				Console.Error.WriteLine( "{0} : Ignoring file not ending in .md", file.Name );
 				return;
 			}
+			Console.Error.WriteLine( $"Working on {file.Name}.{file.Extension}" );
+
 			string name = file.Name;
 			if ( name.ToUpperInvariant() == "README" ) {
 				name = "index";
@@ -86,6 +87,7 @@ namespace D2L.Dev.Docs.Render {
 				// TODO: Handle "absolute" urls, e.g. start with "/"
 
 				new RelativeFile( input, output, url ).Copy();
+				Console.WriteLine( $"Copied file '{url}'" );
 			}
 		}
 
