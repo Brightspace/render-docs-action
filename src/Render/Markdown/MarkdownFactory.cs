@@ -1,5 +1,6 @@
 using System.IO;
 using Markdig;
+using Markdig.Extensions.AutoIdentifiers;
 using Markdig.Parsers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
