@@ -25,15 +25,18 @@ namespace D2L.Dev.Docs.Render {
 				Directory.CreateDirectory( output );
 			}
 
+			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" ).Split( '/' )[1];
+			var context = new DocumentContext( input, output, repoName );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
-				await DoFile( new RelativeFile( input, output, filename ) );
+				await DoFile( context, new RelativeFile( input, output, filename ) );
 			}
 
 			return 0;
 		}
 
-		private static async Task DoFile( RelativeFile file ) {
+		private static async Task DoFile( DocumentContext context, RelativeFile file ) {
 			if ( file.Extension != "md" ) {
 				return;
 			}
@@ -46,10 +49,6 @@ namespace D2L.Dev.Docs.Render {
 
 			var text = await file.Read();
 
-			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
-			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" ).Split('/')[1];
-
-			var context = new DocumentContext( repoName );
 			var doc = MarkdownFactory.Parse( text );
 			doc.ApplyD2LTweaks();
 			var html = MarkdownFactory.RenderToString( doc, context );
