@@ -14,14 +14,10 @@
 		}
 
 		public FileInfo( string path ) {
-			Path = path.Substring( 0, path.LastIndexOf( '/' ) );
+			path = path.Replace('\\', '/');
+			Path = path.Contains('/') ? path.Substring( 0, path.LastIndexOf( '/' ) ) : "";
 			Name = System.IO.Path.GetFileNameWithoutExtension( path );
 			Extension = System.IO.Path.GetExtension( path ).TrimStart( '.' );
-		}
-		public FileInfo( string path, string name, string extension ) {
-			Path = path;
-			Name = name;
-			Extension = extension;
 		}
 	}
 }
