@@ -3,9 +3,13 @@
 	// Some possibilities could be github repo url, list of docs repos
 	internal sealed class DocumentContext {
 
+		public string InputDirectory { get; }
+		public string OutputDirectory { get; }
 		public string DocRootRepoName { get; }
 
-		public DocumentContext( string docRootRepoName ) {
+		public DocumentContext( string inputDir, string outputDir, string docRootRepoName ) {
+			InputDirectory = inputDir;
+			OutputDirectory = outputDir;
 			DocRootRepoName = docRootRepoName;
 		}
 	}
