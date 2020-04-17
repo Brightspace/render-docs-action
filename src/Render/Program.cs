@@ -26,26 +26,22 @@ namespace D2L.Dev.Docs.Render {
 			}
 
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
-			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" ).Split( '/' )[1];
+			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" )?.Split( '/' )[1] ?? "";
 			var context = new DocumentContext( input, output, repoName );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
-				await DoFile( context, new RelativeFile( input, output, filename ) );
+				var file = GetOutput(context, filename);
+				await DoFile( context, file );
 			}
 
 			return 0;
 		}
 
 		private static async Task DoFile( DocumentContext context, RelativeFile file ) {
-			if ( file.Extension != "md" ) {
+			if ( file.Source.Extension != "md" ) {
 				return;
 			}
-			Console.Error.WriteLine( $"Working on {file.Name}.{file.Extension}" );
-
-			string name = file.Name;
-			if ( name.ToUpperInvariant() == "README" ) {
-				name = "index";
-			}
+			Console.Error.WriteLine( $"Working on {file.Source.FullPath}" );
 
 			var text = await file.Read();
 
@@ -59,11 +55,11 @@ namespace D2L.Dev.Docs.Render {
 				content: html
 			);
 
-			await file.Write( formatted, name + ".html" );
-			CopyAssociatedFiles( doc, file.SourceRoot, file.DestinationRoot );
+			await file.Write( formatted );
+			CopyAssociatedFiles( doc, context, file.Source.Path );
 		}
 
-		private static void CopyAssociatedFiles( MarkdownDocument doc, string input, string output ) {
+		private static void CopyAssociatedFiles( MarkdownDocument doc, DocumentContext context, string directory ) {
 			var links = doc.Descendants().OfType<LinkInline>();
                         
 			foreach( var link in links ) {
@@ -77,7 +73,7 @@ namespace D2L.Dev.Docs.Render {
 					continue;
 				}
 
-				url = Path.Join( input, url );
+				url = Path.Join( directory, url );
 				if ( !File.Exists( url ) ) {
 					Console.WriteLine( $"Could not find file '{url}', skipping" );
 					continue;
@@ -85,7 +81,7 @@ namespace D2L.Dev.Docs.Render {
 
 				// TODO: Handle "absolute" urls, e.g. start with "/"
 
-				new RelativeFile( input, output, url ).Copy();
+				GetOutput( context, url ).Copy();
 				Console.WriteLine( $"Copied file '{url}'" );
 			}
 		}
@@ -96,6 +92,18 @@ namespace D2L.Dev.Docs.Render {
 			).Inline;
 			var titleLiteral = inline.Descendants<LiteralInline>().Single();
 			return titleLiteral.Content.ToString();
+		}
+
+		private static RelativeFile GetOutput( DocumentContext context, string path ) {
+			var infile = new FileInfo( path );
+			string name = (infile.Name == "README") ? "index" : infile.Name;
+			string ext = (infile.Extension == "md") ? "html" : infile.Extension;
+
+			string relparent = Path.GetRelativePath( context.InputDirectory, infile.Path );
+			string dstpath = Path.Join( context.OutputDirectory, relparent, $"{name}.{ext}" );
+			var outfile = new FileInfo( dstpath );
+
+			return new RelativeFile( context, infile, outfile );
 		}
 
 	}
