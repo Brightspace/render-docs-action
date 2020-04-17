@@ -9,6 +9,10 @@
 			}
 		}
 
+		public bool Exists() {
+			return System.IO.File.Exists( FullPath );
+		}
+
 		public FileInfo( string path ) {
 			Path = path.Substring( 0, path.LastIndexOf( '/' ) );
 			Name = System.IO.Path.GetFileNameWithoutExtension( path );
