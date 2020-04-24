@@ -51,7 +51,10 @@ namespace D2L.Dev.Docs.Render.Markdown {
 	
 			renderer.ObjectRenderers.Replace<LinkInlineRenderer>(
 				new D2LLinkInlineRenderer( context )
-			); 
+			);
+			renderer.ObjectRenderers.Replace<HeadingRenderer>(
+				new HeadingLinkRenderer()
+			);
 
 			renderer.ObjectRenderers
 				.Find<CodeBlockRenderer>()
