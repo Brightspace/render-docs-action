@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace D2L.Dev.Docs.Render {
+namespace D2L.Dev.Docs.Render.VFS {
 
 	internal sealed class RelativeFile {
 

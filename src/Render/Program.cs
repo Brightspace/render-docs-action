@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using D2L.Dev.Docs.Render.Markdown;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
+using D2L.Dev.Docs.Render.VFS;
 
 namespace D2L.Dev.Docs.Render {
 	internal static class Program {
