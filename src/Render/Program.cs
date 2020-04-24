@@ -26,8 +26,6 @@ namespace D2L.Dev.Docs.Render {
 				Directory.CreateDirectory( output );
 			}
 
-			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
-			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" )?.Split( '/' )[1] ?? "";
 			var context = new DocumentContext( input, output, null );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
