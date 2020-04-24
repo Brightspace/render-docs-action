@@ -7,13 +7,12 @@ namespace D2L.Dev.Docs.Render.Markdown {
 
 		public string InputDirectory { get; }
 		public string OutputDirectory { get; }
-		public string DocRootRepoName { get; }
 		public SubModule SubModule { get; }
 
-		public DocumentContext( string inputDir, string outputDir, string docRootRepoName ) {
+		public DocumentContext( string inputDir, string outputDir, SubModule subModule ) {
 			InputDirectory = inputDir;
 			OutputDirectory = outputDir;
-			DocRootRepoName = docRootRepoName;
+			SubModule = subModule;
 		}
 	}
 }

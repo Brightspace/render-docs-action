@@ -75,8 +75,8 @@ namespace D2L.Dev.Docs.Render.Markdown {
 		private string RewriteLink( string url, DocumentContext context ) {
 			string rewritten = url;
 
-			if( url.StartsWith( "/" ) ) {
-				rewritten = $"/{context.DocRootRepoName}{rewritten}";
+			if( url.StartsWith( "/" ) && context.SubModule != null ) {
+				rewritten = $"/{context.SubModule.RepoName}{rewritten}";
 			}
 
 			if ( rewritten.EndsWith( ".md" ) ) {
