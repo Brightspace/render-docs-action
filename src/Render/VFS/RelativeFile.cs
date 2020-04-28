@@ -21,6 +21,9 @@ namespace D2L.Dev.Docs.Render.VFS {
 		}
 
 		public void Copy() {
+			if( File.Exists( Destination.FullPath ) ) {
+				return;
+			}
 			new DirectoryInfo( Destination.Path ).Create();
 			File.Copy( Source.FullPath, Destination.FullPath );
 		}
