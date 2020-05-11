@@ -98,7 +98,7 @@ namespace D2L.Dev.Docs.Render {
 			catch ( Exception e) 
 				when (e is InvalidOperationException || e is ArgumentNullException) 
 			{
-				throw new ArgumentException( "Document should have exactly 1 level-1 heading (should be unformatted)", e );
+				throw new ArgumentException( "Document should have exactly one level-1 heading (should be unformatted)", e );
 			}
 		}
 
