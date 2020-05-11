@@ -88,11 +88,18 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static string GetTitle( MarkdownDocument doc ) {
-			var inline = doc.Descendants<HeadingBlock>().Single(
-				h => h.Level == 1
-			).Inline;
-			var titleLiteral = inline.Descendants<LiteralInline>().Single();
-			return titleLiteral.Content.ToString();
+			try {
+				var inline = doc.Descendants<HeadingBlock>().Single(
+					h => h.Level == 1
+				).Inline;
+				var titleLiteral = inline.Descendants<LiteralInline>().Single();
+				return titleLiteral.Content.ToString();
+			}
+			catch ( Exception e) 
+				when (e is InvalidOperationException || e is ArgumentNullException) 
+			{
+				throw new ArgumentException( "Document should have exactly 1 level-1 heading (should be unformatted)", e );
+			}
 		}
 
 		private static RelativeFile GetOutput( DocumentContext context, string path ) {
