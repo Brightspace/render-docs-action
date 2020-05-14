@@ -1,6 +1,7 @@
 using System.IO;
 using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
+using Markdig.Extensions.Tables;
 using Markdig.Parsers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
@@ -51,7 +52,12 @@ namespace D2L.Dev.Docs.Render.Markdown {
 	
 			renderer.ObjectRenderers.Replace<LinkInlineRenderer>(
 				new D2LLinkInlineRenderer( context )
-			); 
+			);
+			renderer.ObjectRenderers.Replace<HeadingRenderer>(
+				new HeadingLinkRenderer()
+			);
+
+			renderer.ObjectRenderers.Add( new HtmlTableRenderer() );
 
 			renderer.ObjectRenderers
 				.Find<CodeBlockRenderer>()
