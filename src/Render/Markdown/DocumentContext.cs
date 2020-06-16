@@ -7,9 +7,9 @@ namespace D2L.Dev.Docs.Render.Markdown {
 
 		public string InputDirectory { get; }
 		public string OutputDirectory { get; }
-		public SubModule SubModule { get; }
+		public SubModuleInfo SubModule { get; }
 
-		public DocumentContext( string inputDir, string outputDir, SubModule subModule ) {
+		public DocumentContext( string inputDir, string outputDir, SubModuleInfo subModule ) {
 			InputDirectory = inputDir;
 			OutputDirectory = outputDir;
 			SubModule = subModule;
