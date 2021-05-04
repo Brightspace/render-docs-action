@@ -9,11 +9,13 @@ namespace D2L.Dev.Docs.Render.VFS {
 		public FileInfo Source { get; }
 		public FileInfo Destination { get; }
 		public DocumentContext Context { get; }
+		public string SourceEditLink { get; }
 
-		public RelativeFile( DocumentContext context, FileInfo source, FileInfo destination ) {
+		public RelativeFile( DocumentContext context, FileInfo source, FileInfo destination, string sourceEditLink ) {
 			Context = context;
 			Source = source;
 			Destination = destination;
+			SourceEditLink = sourceEditLink;
 		}
 
 		public async Task<string> Read() {

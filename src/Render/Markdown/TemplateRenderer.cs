@@ -18,10 +18,16 @@ namespace D2L.Dev.Docs.Render.Markdown {
 			m_template = Template.Parse( template );
 		}
 
-		public async Task<string> RenderAsync( string title, string content ) {
+		public async Task<string> RenderAsync(
+			string title,
+			string content,
+			string editLink
+		) {
+
 			return await m_template.RenderAsync( new {
 				title,
-				content
+				content,
+				editlink = editLink // Scriban won't inline when the var is "editLink" for some reason ¯\_(ツ)_/¯
 			} );
 		}
 
