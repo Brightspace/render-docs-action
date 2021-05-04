@@ -1,4 +1,5 @@
-﻿using D2L.Dev.Docs.Render.Markdown;
+﻿using System;
+using D2L.Dev.Docs.Render.Markdown;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -9,13 +10,13 @@ namespace D2L.Dev.Docs.Render.VFS {
 		public FileInfo Source { get; }
 		public FileInfo Destination { get; }
 		public DocumentContext Context { get; }
-		public string SourceEditLink { get; }
+		public Uri EditSourceLink { get; }
 
-		public RelativeFile( DocumentContext context, FileInfo source, FileInfo destination, string sourceEditLink ) {
+		public RelativeFile( DocumentContext context, FileInfo source, FileInfo destination, Uri editSourceLink ) {
 			Context = context;
 			Source = source;
 			Destination = destination;
-			SourceEditLink = sourceEditLink;
+			EditSourceLink = editSourceLink;
 		}
 
 		public async Task<string> Read() {

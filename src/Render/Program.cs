@@ -54,7 +54,7 @@ namespace D2L.Dev.Docs.Render {
 			var formatted = await renderer.RenderAsync(
 				title: GetTitle( doc ),
 				content: html,
-				editLink: file.SourceEditLink
+				editLink: file.EditSourceLink
 			);
 
 			await file.Write( formatted );
@@ -106,12 +106,12 @@ namespace D2L.Dev.Docs.Render {
 			var outfile = new FileInfo( dstpath );
 
 			string relativePath = Path.GetRelativePath( context.InputDirectory, path );
-			Uri absoluteEditUri = new Uri(
+			Uri editSourceUri = new Uri(
 				$"https://github.com/Brightspace/{context.DocRootRepoName}/edit/master/{relativePath}",
 				UriKind.Absolute
 			);
 
-			return new RelativeFile( context, infile, outfile, absoluteEditUri.AbsoluteUri );
+			return new RelativeFile( context, infile, outfile, editSourceUri );
 		}
 	}
 }

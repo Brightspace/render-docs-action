@@ -1,4 +1,5 @@
-﻿using Scriban;
+﻿using System;
+using Scriban;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -21,13 +22,13 @@ namespace D2L.Dev.Docs.Render.Markdown {
 		public async Task<string> RenderAsync(
 			string title,
 			string content,
-			string editLink
+			Uri editLink
 		) {
 
 			return await m_template.RenderAsync( new {
 				title,
 				content,
-				editlink = editLink // Scriban won't inline when the var is "editLink" for some reason ¯\_(ツ)_/¯
+				editlink = editLink.AbsoluteUri // Scriban won't inline when the var is "editLink" for some reason ¯\_(ツ)_/¯
 			} );
 		}
 
