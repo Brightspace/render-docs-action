@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "D2L.Dev.Docs.Render": {
+      "commandName": "Project",
+      "commandLineArgs": "--input ..\\..\\..\\..\\..\\testdata\\input --output ..\\..\\..\\..\\..\\testdata\\output",
+      "environmentVariables": {
+        "GITHUB_REPOSITORY": "Brightspace/architecture"
+      }
+    }
+  }
+}
