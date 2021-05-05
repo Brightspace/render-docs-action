@@ -1,0 +1,20 @@
+name: ci
+defaults:
+  run:
+    working-directory: src
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: Brightspace/third-party-actions@actions/checkout
+      - uses: Brightspace/third-party-actions@actions/setup-dotnet
+      - run: dotnet build
