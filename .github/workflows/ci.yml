@@ -12,7 +12,6 @@ on:
 jobs:
   ci:
     name: CI
-    runs-on: [self-hosted, AWS, Linux]
     timeout-minutes: 5
 
     steps:
