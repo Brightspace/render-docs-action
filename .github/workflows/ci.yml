@@ -12,8 +12,8 @@ on:
 jobs:
   ci:
     name: CI
+    runs-on: Linux
     timeout-minutes: 5
-
     steps:
       - uses: Brightspace/third-party-actions@actions/checkout
       - uses: Brightspace/third-party-actions@actions/setup-dotnet
