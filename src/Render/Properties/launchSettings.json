@@ -6,9 +6,6 @@
       "environmentVariables": {
         "GITHUB_REPOSITORY": "Brightspace/testero"
       }
-    },
-    "GitHubAction": {
-      "commandName": "Project"
     }
   }
 }
