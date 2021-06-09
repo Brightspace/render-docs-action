@@ -4,8 +4,11 @@
       "commandName": "Project",
       "commandLineArgs": "--input ..\\..\\..\\..\\..\\testdata\\input --output ..\\..\\..\\..\\..\\testdata\\output",
       "environmentVariables": {
-        "GITHUB_REPOSITORY": "Brightspace/architecture"
+        "GITHUB_REPOSITORY": "Brightspace/testero"
       }
+    },
+    "GitHubAction": {
+      "commandName": "Project"
     }
   }
 }
