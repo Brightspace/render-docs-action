@@ -89,17 +89,46 @@ namespace D2L.Dev.Docs.Render {
 		}
 
 		private static string GetTitle( MarkdownDocument doc ) {
-			var inline = doc.Descendants<HeadingBlock>().SingleOrDefault(
-				h => h.Level == 1
-			);
-			if( inline == default ) {
-				throw new ArgumentException( "Document should have exactly one level-1 heading" );
-			}
-			var titleLiteral = inline.Inline.Descendants<LiteralInline>().SingleOrDefault();
-			if ( titleLiteral == default ) {
-				throw new ArgumentException( "The level-1 heading should be unformatted." );
-			}
+
+			HeadingBlock headingBlock = GetSingleTitleOrThrow( doc );
+
+			LiteralInline titleLiteral = GetUnformattedContentOrThrow( headingBlock );
+
 			return titleLiteral.Content.ToString();
+		}
+
+		private static LiteralInline GetUnformattedContentOrThrow(HeadingBlock headingBlock) {
+			var literalInlines =
+				headingBlock
+					.Inline
+					.Descendants<LiteralInline>()
+					.ToArray();
+
+			if( literalInlines.Length > 1 ) {
+				throw new ArgumentException( "The level-1 heading must be unformatted." );
+			}
+
+			var titleLiteral = literalInlines.Single();
+			return titleLiteral;
+		}
+
+		private static HeadingBlock GetSingleTitleOrThrow( MarkdownDocument doc ) {
+			var titles =
+				doc
+					.Descendants<HeadingBlock>()
+					.Where( h => h.Level == 1 )
+					.ToArray();
+
+			if( titles.Length == 0 ) {
+				throw new ArgumentException("Document is missing a level-1 heading");
+			}
+
+			if( titles.Length > 1 ) {
+				throw new ArgumentException("Document has multiple level-1 headings");
+			}
+
+			var inline = titles.Single();
+			return inline;
 		}
 
 		private static RelativeFile GetOutput( DocumentContext context, string path ) {
