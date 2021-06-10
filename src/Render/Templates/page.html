@@ -3,6 +3,8 @@
 <link rel="preconnect" href="https://s.brightspace.com">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://d2l.dev/ui-core/index.js"></script>
+<script src="/main.js"></script>
+
 <link rel="stylesheet" href="/style.css">
 
 <title>{{title}} - Docs @ D2L</title>
@@ -11,11 +13,12 @@
     <header>
         <nav>
             <a href="/" class="home">Docs @ D2L</a>
-            <d2l-input-search label="Search" placeholder="Search for documentation..."></d2l-input-search>
+            <d2l-input-search id="search-input" label="Search" placeholder="Search for documentation..."></d2l-input-search>
             
-            <!-- TODO: make this link go to the right spot! -->
-            <a href="https://github.com/Brightspace/render-docs-action/edit/master/src/Render/Templates/page.html">
-              <d2l-icon icon="tier2:edit" id="edit-btn"></d2l-icon>
+            <d2l-icon icon="tier2:search" id="search-btn"></d2l-icon>
+            
+            <a id="edit-btn" href="{{editlink}}">
+              <d2l-icon icon="tier2:edit"></d2l-icon>
             </a>
         </nav>
     </header>

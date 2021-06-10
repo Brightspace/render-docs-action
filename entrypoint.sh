@@ -5,4 +5,4 @@ if [ $# -ne 2 ]; then
 	exit 1
 fi
 
-dotnet run -p /render/src/Render/D2L.Dev.Docs.Render.csproj --input $1 --output $2
+dotnet run --no-launch-profile -p /render/src/Render/D2L.Dev.Docs.Render.csproj --input $1 --output $2

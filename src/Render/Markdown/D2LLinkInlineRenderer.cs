@@ -79,11 +79,14 @@ namespace D2L.Dev.Docs.Render.Markdown {
 				rewritten = $"/{context.DocRootRepoName}{rewritten}";
 			}
 
+			// Change extension in standard case
 			if ( rewritten.EndsWith( ".md" ) ) {
-				rewritten = rewritten.Substring( 0, rewritten.Length - 3 ) + ".html";
+				return rewritten.Substring( 0, rewritten.Length - 3 ) + ".html";
 			}
 
-			return rewritten;
+			// Change extension if there's an anchor.
+			// We avoid changing all ".md" to ".html", otherwise we could easily mess up other parts of the url.
+			return rewritten.Replace( ".md#", ".html#" );
 		}
 
 	}
