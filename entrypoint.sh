@@ -7,4 +7,4 @@ fi
 
 cd /render/src/Render
 
-dotnet run --no-launch-profile -p D2L.Dev.Docs.Render.csproj --input ../../../$1 --output ../../../$2
+dotnet run --no-launch-profile -p D2L.Dev.Docs.Render.csproj --input /github/workspace/$1 --output /github/workspace/$2
