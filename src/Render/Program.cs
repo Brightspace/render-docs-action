@@ -28,7 +28,7 @@ namespace D2L.Dev.Docs.Render {
 
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
 			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" )?.Split( '/' )[1] ?? "";
-			var context = new DocumentContext( input, output, repoName );
+			var context = new DocumentContext( input, output, repoName, GetBranch() );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
 				var file = GetOutput(context, filename);
@@ -36,6 +36,27 @@ namespace D2L.Dev.Docs.Render {
 			}
 
 			return 0;
+		}
+
+		private static string GetBranch() {
+			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+
+			var gitRef = Environment.GetEnvironmentVariable( "GITHUB_REF" );
+
+			if( gitRef == null ) {
+				return "master";
+			}
+
+			const string refsHeads = "refs/heads/";
+
+			// I'm not clear on all the possible values of this envvar, so for
+			// now I'll handle the expected value (refs/heads/<branch>) and
+			// fail fast for other values
+			if( !gitRef.StartsWith( refsHeads ) ) {
+				throw new ArgumentException( $"unexpected REF, {gitRef}", nameof( gitRef ) );
+			}
+
+			return gitRef.Substring( refsHeads.Length );
 		}
 
 		private static async Task DoFile( DocumentContext context, RelativeFile file ) {
