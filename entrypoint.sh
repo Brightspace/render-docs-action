@@ -5,4 +5,10 @@ if [ $# -ne 2 ]; then
 	exit 1
 fi
 
-dotnet run --no-launch-profile --framework netcoreapp3.1 -p /render/src/Render/D2L.Dev.Docs.Render.csproj --input $1 --output $2
+
+
+cd render
+cd src
+cd Render
+
+dotnet run --no-launch-profile -p D2L.Dev.Docs.Render.csproj --input ../../../$1 --output ../../../$2
