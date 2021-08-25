@@ -9,12 +9,14 @@ namespace D2L.Dev.Docs.Render.Markdown {
 		public string OutputDirectory { get; }
 		public string DocRootRepoName { get; }
 		public string Branch { get; }
+		public string DocsPath { get; }
 
-		public DocumentContext( string inputDir, string outputDir, string docRootRepoName, string defaultBranch ) {
+		public DocumentContext( string inputDir, string outputDir, string docRootRepoName, string defaultBranch, string docsPath ) {
 			InputDirectory = inputDir;
 			OutputDirectory = outputDir;
 			DocRootRepoName = docRootRepoName;
 			Branch = defaultBranch;
+			DocsPath = docsPath;
 		}
 	}
 }
