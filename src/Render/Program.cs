@@ -57,23 +57,18 @@ namespace D2L.Dev.Docs.Render {
 
 		private static string GetBranch() {
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
-
 			var gitRef = Environment.GetEnvironmentVariable( "GITHUB_REF" );
 
-			if( gitRef == null ) {
-				return "master";
-			}
+			return GetBranchFromRef( gitRef );
+		}
 
-			const string refsHeads = "refs/heads/";
-
-			// I'm not clear on all the possible values of this envvar, so for
-			// now I'll handle the expected value (refs/heads/<branch>) and
-			// fail fast for other values
-			if( !gitRef.StartsWith( refsHeads ) ) {
-				throw new ArgumentException( $"unexpected REF, {gitRef}", nameof( gitRef ) );
-			}
-
-			return gitRef.Substring( refsHeads.Length );
+		internal static string GetBranchFromRef( string? gitRef ) {
+			// Currently only supports main or master branches.
+			// Want to support arbitrary default branches, but starting lazy.
+			return gitRef switch {
+				"refs/heads/main" => "main",
+				_ => "master",
+			};
 		}
 
 		private static async Task DoFile( DocumentContext context, RelativeFile file ) {
@@ -181,7 +176,7 @@ namespace D2L.Dev.Docs.Render {
 			string relativePath = Path.GetRelativePath( context.InputDirectory, path );
 
 			Uri editSourceUri = new Uri(
-				$"https://github.com/Brightspace/{context.DocRootRepoName}/edit/master/{context.DocsPath}{relativePath}",
+				$"https://github.com/Brightspace/{context.DocRootRepoName}/edit/{context.Branch}/{context.DocsPath}{relativePath}",
 				UriKind.Absolute
 			);
 

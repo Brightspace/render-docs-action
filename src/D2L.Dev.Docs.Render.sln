@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D2L.Dev.Docs.Render", "Render\D2L.Dev.Docs.Render.csproj", "{8D522B90-048A-4D24-B400-D311EABE5AAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Dev.Docs.Render.UnitTests", "D2L.Dev.Docs.Render.UnitTests\D2L.Dev.Docs.Render.UnitTests.csproj", "{E55433B3-FA5F-4953-ADEB-CE5E77CD9292}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8D522B90-048A-4D24-B400-D311EABE5AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D522B90-048A-4D24-B400-D311EABE5AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D522B90-048A-4D24-B400-D311EABE5AAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E55433B3-FA5F-4953-ADEB-CE5E77CD9292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E55433B3-FA5F-4953-ADEB-CE5E77CD9292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E55433B3-FA5F-4953-ADEB-CE5E77CD9292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E55433B3-FA5F-4953-ADEB-CE5E77CD9292}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
