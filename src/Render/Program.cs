@@ -9,13 +9,16 @@ using D2L.Dev.Docs.Render.VFS;
 
 namespace D2L.Dev.Docs.Render {
 	internal static class Program {
-		/// <param name="input">The path to a directory of markdown files to render</param>
-		/// <param name="output">The directory to put the rendered html files</param>
-		public static async Task<int> Main( string input, string output ) {
-			if ( input == null || output == null ) {
-				Console.Error.WriteLine( "--input and --output arguments are required" );
+		/// <param name="repoRoot">The path to repo root directory.</param>
+		/// <param name="output">The directory to put the rendered html files.</param>
+		/// <param name="docsPath">The path within the repo containing the docs files to be rendered.</param>
+		public static async Task<int> Main( string repoRoot, string output, string docsPath ) {
+			if( repoRoot == null || output == null || docsPath == null ) {
+				Console.Error.WriteLine( "--repo-root, --output, and --docs-path arguments are required" );
 				return -1;
 			}
+
+			string input = Path.Combine( repoRoot, docsPath );
 
 			if( !Directory.Exists( input ) ) {
 				Console.Error.WriteLine( "input must be a  directory containing markdown (.md) files" );
@@ -26,9 +29,11 @@ namespace D2L.Dev.Docs.Render {
 				Directory.CreateDirectory( output );
 			}
 
+			string docsPathSanitized = GetSanitizedDocsPath( docsPath );
+
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
 			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" )?.Split( '/' )[1] ?? "";
-			var context = new DocumentContext( input, output, repoName, GetBranch() );
+			var context = new DocumentContext( input, output, repoName, GetBranch(), docsPathSanitized );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
 				var file = GetOutput(context, filename);
@@ -36,6 +41,18 @@ namespace D2L.Dev.Docs.Render {
 			}
 
 			return 0;
+		}
+
+		private static string GetSanitizedDocsPath( string docsPath ) {
+			string docsPathSanitized;
+			if( docsPath == "." ) {
+				docsPathSanitized = "";
+			} else {
+				// Remove leading slashes and ensure there's only one trailing slash
+				docsPathSanitized = docsPath.TrimStart( '/' ).TrimEnd( '/' ) + '/';
+			}
+
+			return docsPathSanitized;
 		}
 
 		private static string GetBranch() {
@@ -162,8 +179,9 @@ namespace D2L.Dev.Docs.Render {
 			var outfile = new FileInfo( dstpath );
 
 			string relativePath = Path.GetRelativePath( context.InputDirectory, path );
+
 			Uri editSourceUri = new Uri(
-				$"https://github.com/Brightspace/{context.DocRootRepoName}/edit/master/{relativePath}",
+				$"https://github.com/Brightspace/{context.DocRootRepoName}/edit/master/{context.DocsPath}{relativePath}",
 				UriKind.Absolute
 			);
 

@@ -2,7 +2,7 @@
   "profiles": {
     "D2L.Dev.Docs.Render": {
       "commandName": "Project",
-      "commandLineArgs": "--input ..\\..\\..\\..\\..\\testdata\\input --output ..\\..\\..\\..\\..\\testdata\\output",
+      "commandLineArgs": "--repo-root ..\\..\\..\\..\\..\\ --output ..\\..\\..\\..\\..\\testdata\\output --docs-path testdata\\input",
       "environmentVariables": {
         "GITHUB_REPOSITORY": "Brightspace/testero",
         "GITHUB_REF": "refs/heads/cpacey/test"
