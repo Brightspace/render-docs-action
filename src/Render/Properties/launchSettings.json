@@ -4,7 +4,8 @@
       "commandName": "Project",
       "commandLineArgs": "--input ..\\..\\..\\..\\..\\testdata\\input --output ..\\..\\..\\..\\..\\testdata\\output",
       "environmentVariables": {
-        "GITHUB_REPOSITORY": "Brightspace/testero"
+        "GITHUB_REPOSITORY": "Brightspace/testero",
+        "GITHUB_REF": "refs/heads/cpacey/test"
       }
     }
   }
