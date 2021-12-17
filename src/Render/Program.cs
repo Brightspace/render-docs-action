@@ -35,11 +35,11 @@ namespace D2L.Dev.Docs.Render {
 				Directory.CreateDirectory( output );
 			}
 
-			string docsPathSanitized = GetSanitizedDocsPath( docsPath, GetBranch(), docsPathSanitized );
+			string docsPathSanitized = GetSanitizedDocsPath( docsPath );
 
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
 			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" )?.Split( '/' )[1] ?? "";
-			var context = new DocumentContext( input, output, repoName );
+			var context = new DocumentContext( input, output, repoName, GetBranch(), docsPathSanitized );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
 				var file = GetOutput(context, filename);
