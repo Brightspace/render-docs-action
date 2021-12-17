@@ -3,14 +3,19 @@ description: Renders markdown into D2L-formatted html; result stored in /output
 inputs:
   docs_path:
     description: "Relative path to the folder of markdown files to render"
-    required: true
+    required: false
+    default: docs
   output_dir:
     description: "Path to the output directory to use"
     required: false
     default: output
+  template:
+    description: "A scriban HTML template for rendering"
+    required: false
 runs:
   using: docker
   image: Dockerfile
   args:
     - ${{ inputs.docs_path }}
     - ${{ inputs.output_dir }}
+    - ${{ inputs.template }}
