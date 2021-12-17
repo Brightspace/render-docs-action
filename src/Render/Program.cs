@@ -43,7 +43,7 @@ namespace D2L.Dev.Docs.Render {
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
 			foreach ( var filename in directories ) {
 				var file = GetOutput(context, filename);
-				await DoFile( context, file, templatePath );
+				await DoFile( context, file, Path.Combine( repoRoot, templatePath ) );
 			}
 
 			return 0;
