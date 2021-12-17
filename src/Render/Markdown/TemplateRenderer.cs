@@ -8,6 +8,12 @@ namespace D2L.Dev.Docs.Render.Markdown {
 	internal class TemplateRenderer {
 		private readonly Template m_template;
 
+		public static TemplateRenderer CreateFromFile( string templatePath ) {
+			using var file = File.Open( templatePath );
+			using var reader = new StreamReader( file );
+			return new TemplateRenderer( reader.ReadToEnd() );
+		}
+
 		public static TemplateRenderer CreateFromResource( string resourceName ) {
 			var assembly = Assembly.GetExecutingAssembly();
 			using var stream = assembly.GetManifestResourceStream( $"{assembly.GetName().Name}.{resourceName}" );
