@@ -9,7 +9,7 @@ namespace D2L.Dev.Docs.Render.Markdown {
 		private readonly Template m_template;
 
 		public static TemplateRenderer CreateFromFile( string templatePath ) {
-			using var file = File.Open( templatePath );
+			using var file = File.Open( templatePath, FileMode.Open );
 			using var reader = new StreamReader( file );
 			return new TemplateRenderer( reader.ReadToEnd() );
 		}
