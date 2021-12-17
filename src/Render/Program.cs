@@ -90,7 +90,7 @@ namespace D2L.Dev.Docs.Render {
 			doc.ApplyD2LTweaks();
 			var html = MarkdownFactory.RenderToString( doc, context );
 
-			var renderer = templatePath == null
+			var renderer = templatePath.IsNullOrEmpty()
 				? TemplateRenderer.CreateFromResource( "Templates.page.html" )
 				: TemplateRenderer.CreateFromFile( templatePath );
 
