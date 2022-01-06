@@ -10,13 +10,17 @@ namespace D2L.Dev.Docs.Render.Markdown {
 		public string DocRootRepoName { get; }
 		public string Branch { get; }
 		public string DocsPath { get; }
+		public string RepoRoot { get; }
+		public string? TemplatePath { get; }
 
-		public DocumentContext( string inputDir, string outputDir, string docRootRepoName, string defaultBranch, string docsPath ) {
+		public DocumentContext( string inputDir, string outputDir, string docRootRepoName, string defaultBranch, string docsPath, string repoRoot, string? templatePath ) {
 			InputDirectory = inputDir;
 			OutputDirectory = outputDir;
 			DocRootRepoName = docRootRepoName;
 			Branch = defaultBranch;
 			DocsPath = docsPath;
+			RepoRoot = repoRoot;
+			TemplatePath = templatePath;
 		}
 	}
 }

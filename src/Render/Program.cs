@@ -17,7 +17,7 @@ namespace D2L.Dev.Docs.Render {
 			string repoRoot,
 			string output,
 			string docsPath,
-			string templatePath = null
+			string? templatePath = null
 		) {
 			if ( repoRoot == null || output == null || docsPath == null ) {
 				Console.Error.WriteLine( "--repo-root, --output, and --docs-path arguments are required" );
@@ -39,11 +39,20 @@ namespace D2L.Dev.Docs.Render {
 
 			// See https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
 			var repoName = Environment.GetEnvironmentVariable( "GITHUB_REPOSITORY" )?.Split( '/' )[1] ?? "";
-			var context = new DocumentContext( input, output, repoName, GetBranch(), docsPathSanitized );
 			var directories = Directory.EnumerateFiles( input, "*", SearchOption.AllDirectories );
+			var context = new DocumentContext(
+				inputDir: input,
+				outputDir: output,
+				docRootRepoName: repoName,
+				defaultBranch: GetBranch(),
+				docsPathSanitized,
+				repoRoot: repoRoot,
+				templatePath: templatePath
+			);
+
 			foreach ( var filename in directories ) {
 				var file = GetOutput(context, filename);
-				await DoFile( context, file, Path.Combine( repoRoot, templatePath ) );
+				await DoFile( context, file );
 			}
 
 			return 0;
@@ -77,7 +86,7 @@ namespace D2L.Dev.Docs.Render {
 			};
 		}
 
-		private static async Task DoFile( DocumentContext context, RelativeFile file, string templatePath ) {
+		private static async Task DoFile( DocumentContext context, RelativeFile file ) {
 			if ( file.Source.Extension != "md" ) {
 				return;
 			}
@@ -90,9 +99,9 @@ namespace D2L.Dev.Docs.Render {
 			doc.ApplyD2LTweaks();
 			var html = MarkdownFactory.RenderToString( doc, context );
 
-			var renderer = templatePath == null
+			var renderer = context.TemplatePath == null
 				? TemplateRenderer.CreateFromResource( "Templates.page.html" )
-				: TemplateRenderer.CreateFromFile( templatePath );
+				: TemplateRenderer.CreateFromFile( Path.Join( context.RepoRoot, context.TemplatePath ) );
 
 			var formatted = await renderer.RenderAsync(
 				title: GetTitle( doc ),
