@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="preconnect" href="https://s.brightspace.com">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://d2l.dev/ui-core/index.js"></script>
-<script src="/main.js"></script>
-
-<link rel="stylesheet" href="/style.css">
-
-<title>{{title}} - Docs @ D2L</title>
-
-<body class="d2l-typography">
-    <header>
-        <nav>
-            <a href="/" class="home">Docs @ D2L</a>
-            <d2l-input-search id="search-input" label="Search" placeholder="Search for documentation..."></d2l-input-search>
-            
-            <d2l-icon icon="tier2:search" id="search-btn"></d2l-icon>
-            
-            <a id="edit-btn" href="{{editlink}}">
-              <d2l-icon icon="tier2:edit"></d2l-icon>
-            </a>
-        </nav>
-    </header>
-
-    <main>
-        {{content}}
-    </main>
-</body>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="preconnect" href="https://s.brightspace.com">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://d2l.dev/ui-core/index.js"></script>
+        <script src="/main.js"></script>
+        <link rel="stylesheet" href="/style.css">
+        <title>{{title}} - Docs @ D2L</title>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FCWPV5JNJ0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-FCWPV5JNJ0');
+        </script>
+    </head>
+    <body class="d2l-typography">
+        <header>
+            <nav>
+                <a href="/" class="home">Docs @ D2L</a>
+                <d2l-input-search id="search-input" label="Search" placeholder="Search for documentation..."></d2l-input-search>
+                <d2l-icon icon="tier2:search" id="search-btn"></d2l-icon>
+                <a id="edit-btn" href="{{editlink}}"><d2l-icon icon="tier2:edit"></d2l-icon></a>
+            </nav>
+        </header>
+        <main>
+            {{content}}
+        </main>
+    </body>
+</html>
